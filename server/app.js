@@ -105,6 +105,11 @@ app.use((req, res, next)=>{
 	return next();
 });
 
+// Add version endpoint
+app.get('/api/version', (req, res) => {
+	res.json({ version });
+});
+
 app.use(homebrewApi);
 app.use(adminApi);
 app.use(vaultApi);
@@ -487,8 +492,8 @@ app.get('/account', asyncHandler(async (req, res, next)=>{
 		const query = { authors: req.account.username, googleId: { $exists: false } };
 		const mongoCount = await HomebrewModel.countDocuments(query)
 			.catch((err)=>{
-				mongoCount = 0;
 				console.log(err);
+				return 0;
 			});
 
 		data.accountDetails = {
